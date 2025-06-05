@@ -17,7 +17,8 @@ function App() {
     wallet,
     isLoading: walletLoading,
     error: walletError,
-    getWalletDetails
+    getWalletDetails,
+    createWallet
   } = useWallet();
 
   // Auto-connect to XRPL Client on mount
@@ -28,6 +29,7 @@ function App() {
   useEffect(() => {
     if (isConnected && client) {
       getWalletDetails(client);
+      console.log(wallet)
     }
   }, [isConnected, client, getWalletDetails]);
 
@@ -55,10 +57,8 @@ function App() {
 
   return (
     <div className="App">
-      <h1>XRPL Wallet</h1>
-
       <div>
-        <p>Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
+        <p>XRPL Client Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
         <button onClick={isConnected ? disconnect : connect}>
           {isConnected ? 'Disconnect' : 'Connect'}
         </button>
@@ -68,8 +68,22 @@ function App() {
         <div>
           <h2>Wallet Details</h2>
           <p><strong>Address:</strong> {wallet.address}</p>
+          <p><strong>Balance:</strong> {wallet.address}</p>
+
+          {/* Wallet seed comes from the object created when calling the createTestnetWallet method, it only appears when creating a testnet wallet */}
+          {wallet.seed && (
+            <>
+              <p><strong>Seed:</strong> {wallet.seed}</p>
+              <p><strong>Public Key:</strong> {wallet.publicKey}</p>
+              <p><strong>Private Key:</strong> {wallet.privateKey}</p>
+            </>
+          )}
         </div>
       )}
+
+      <button onClick={() => createWallet(client)}>
+        New wallet
+      </button>
     </div>
   );
 }

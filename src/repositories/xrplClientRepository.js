@@ -3,7 +3,7 @@ import { Client, dropsToXrp, rippleTimeToISOTime } from 'xrpl';
 class XrplClient {
     async createClient() {
         try {
-            const client = new Client(process.env.CLIENT);
+            const client = new Client(process.env.REACT_APP_CLIENT);
             return client;
         } catch (error) {
             console.error('XrplClientRepository: Error creating client:', error);

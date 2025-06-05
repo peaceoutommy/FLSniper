@@ -1,10 +1,10 @@
 import { Wallet, classicAddressToXAddress } from "xrpl";
 
 class WalletRepository {
-    async getWalletDetails({ client }) {
+    async getWalletDetails(client) {
 
         // Get wallet seed from .env
-        const wallet = Wallet.fromSeed(process.env.SEED)
+        const wallet = Wallet.fromSeed(process.env.REACT_APP_SEED)
 
         // Get wallet details
         const { result: { account_data } } = await client.request({
@@ -22,9 +22,7 @@ class WalletRepository {
                     validated_ledger: { reserve_base_xrp, reserve_inc_xrp },
                 },
             },
-        } = await client.request({
-            command: 'server_info',
-        });
+        } = await client.request({ command: 'server_info' });
 
         // Calculate the total reserve amount
         const accountReserve = ownerCount * reserve_inc_xrp + reserve_base_xrp;
@@ -37,6 +35,18 @@ class WalletRepository {
             xAddress: classicAddressToXAddress(wallet.address, false, false),
             address: wallet.address
         };
+    }
+
+    async createWallet() {
+        const wallet = Wallet.generate()
+        return wallet
+    }
+
+    async createTestnetWallet(client) {
+        console.log("Creating testwallet")
+        const fund_result = await client.fundWallet()
+        const wallet = fund_result.wallet
+        return wallet
     }
 
 }

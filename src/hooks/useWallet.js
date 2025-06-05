@@ -28,6 +28,16 @@ export const useWallet = () => {
         }
     }, []);
 
+    const createWallet = useCallback(async (client = null) => {
+        try {
+            const walletDetails = await WalletService.createWallet(client)
+            setWallet(walletDetails)
+            console.log(walletDetails)
+        } catch (error) {
+            console.log("Error generating wallet", error)
+        }
+    })
+
     const clearWallet = useCallback(() => {
         setWallet(null)
         setError(null)
@@ -38,6 +48,7 @@ export const useWallet = () => {
         isLoading,
         error,
         getWalletDetails,
+        createWallet,
         clearWallet
     };
 }
