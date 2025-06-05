@@ -1,3 +1,4 @@
+import { dropsToXrp } from "xrpl";
 import WalletRepository from "../repositories/WalletRepository";
 
 class WalletService {
@@ -10,7 +11,9 @@ class WalletService {
 
         try {
             const walletDetails = await WalletRepository.getWalletDetails(client)
-            return walletDetails
+            const balanceInXrp = dropsToXrp(walletDetails.account_data.Balance)
+
+            return { ...walletDetails, balanceInXrp }
         } catch (error) {
             console.log("Wallet Service: Error getting wallet details", error)
             throw error

@@ -68,7 +68,7 @@ function App() {
         <div>
           <h2>Wallet Details</h2>
           <p><strong>Address:</strong> {wallet.address}</p>
-          <p><strong>Balance:</strong> {wallet.address}</p>
+          <p><strong>Balance:</strong> {wallet.balanceInXrp} XRP</p>
 
           {/* Wallet seed comes from the object created when calling the createTestnetWallet method, it only appears when creating a testnet wallet */}
           {wallet.seed && (
