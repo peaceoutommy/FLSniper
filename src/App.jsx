@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { Router, Routes, Route, BrowserRouter } from 'react-router-dom';
 import { useXrplClient } from './hooks/useXrplClient';
 import { useWallet } from './hooks/useWallet';
 import './App.css'
 
+// Pages
+import Home from './pages/Home';
+
 function App() {
+  const root = document.getElementById("root");
+
   const {
     client,
     isConnecting,
@@ -20,11 +26,6 @@ function App() {
     getWalletDetails,
     createWallet
   } = useWallet();
-
-  // Auto-connect to XRPL Client on mount
-  useEffect(() => {
-    connect();
-  }, [connect]);
 
   useEffect(() => {
     if (isConnected && client) {
@@ -56,35 +57,40 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <div>
-        <p>XRPL Client Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
-        <button onClick={isConnected ? disconnect : connect}>
-          {isConnected ? 'Disconnect' : 'Connect'}
-        </button>
-      </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+    // <div className="App">
+    //   <div>
+    //     <p>XRPL Client Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
+    //     <button onClick={isConnected ? disconnect : connect}>
+    //       {isConnected ? 'Disconnect' : 'Connect'}
+    //     </button>
+    //   </div>
 
-      {wallet && (
-        <div>
-          <h2>Wallet Details</h2>
-          <p><strong>Address:</strong> {wallet.address}</p>
-          <p><strong>Balance:</strong> {wallet.balanceInXrp} XRP</p>
+    //   {wallet && (
+    //     <div>
+    //       <h2>Wallet Details</h2>
+    //       <p><strong>Address:</strong> {wallet.address}</p>
+    //       <p><strong>Balance:</strong> {wallet.balanceInXrp} XRP</p>
 
-          {/* Wallet seed comes from the object created when calling the createTestnetWallet method, it only appears when creating a testnet wallet */}
-          {wallet.seed && (
-            <>
-              <p><strong>Seed:</strong> {wallet.seed}</p>
-              <p><strong>Public Key:</strong> {wallet.publicKey}</p>
-              <p><strong>Private Key:</strong> {wallet.privateKey}</p>
-            </>
-          )}
-        </div>
-      )}
+    //       {/* Wallet seed comes from the object created when calling the createTestnetWallet method, it only appears when creating a testnet wallet */}
+    //       {wallet.seed && (
+    //         <>
+    //           <p><strong>Seed:</strong> {wallet.seed}</p>
+    //           <p><strong>Public Key:</strong> {wallet.publicKey}</p>
+    //           <p><strong>Private Key:</strong> {wallet.privateKey}</p>
+    //         </>
+    //       )}
+    //     </div>
+    //   )}
 
-      <button onClick={() => createWallet(client)}>
-        New wallet
-      </button>
-    </div>
+    //   <button onClick={() => createWallet(client)}>
+    //     New wallet
+    //   </button>
+    // </div>
   );
 }
 
