@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Router, Routes, Route, BrowserRouter } from 'react-router-dom';
-import { useXrplClient } from './hooks/useXrplClient';
-import { useWallet } from './hooks/useWallet';
+import { useXrplClientContext } from './context/xrplClientContex';
+import { useWalletContext } from './context/WalletContext';
 import './App.css'
 
 // Pages
@@ -11,33 +11,11 @@ import Home from './pages/Home';
 import WalletModal from './components/layout/WalletModal';
 
 function App() {
-  const root = document.getElementById("root");
+  const { isConnected, error: clientError, connect } = useXrplClientContext();
+  const { isLoading: walletLoading, error: walletError, wallet: wallet } = useWalletContext();
+  console.log(wallet)
 
-  const {
-    client,
-    isConnecting,
-    isConnected,
-    error: clientError,
-    connect,
-    disconnect
-  } = useXrplClient();
-
-  const {
-    wallet,
-    isLoading: walletLoading,
-    error: walletError,
-    getWalletDetails,
-    createWallet
-  } = useWallet();
-
-  useEffect(() => {
-    if (isConnected && client) {
-      getWalletDetails(client);
-      console.log(wallet)
-    }
-  }, [isConnected, client, getWalletDetails]);
-
-  if (isConnecting) {
+  if (!isConnected) {
     return <div>Connecting to XRPL...</div>;
   }
 
@@ -51,13 +29,13 @@ function App() {
     );
   }
 
-  if (walletLoading) {
-    return <div>Loading wallet details...</div>;
-  }
+  // if (walletLoading) {
+  //   return <div>Loading wallet details...</div>;
+  // }
 
-  if (walletError) {
-    return <div>Error loading wallet: {walletError}</div>;
-  }
+  // if (walletError) {
+  //   return <div>Error loading wallet: {walletError}</div>;
+  // }
 
   return (
     <BrowserRouter>

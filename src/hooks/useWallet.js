@@ -32,11 +32,10 @@ export const useWallet = () => {
         try {
             const walletDetails = await WalletService.createWallet(client)
             setWallet(walletDetails)
-            console.log(walletDetails)
         } catch (error) {
             console.log("Error generating wallet", error)
         }
-    })
+    }, [])
 
     const clearWallet = useCallback(() => {
         setWallet(null)

@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { useXrplClient } from "../hooks/useXrplClient";
 
 const XrplClientContext = createContext(null);
@@ -9,7 +9,6 @@ export const XrplClientProvider = ({ children }) => {
     // Auto connect to Xrpl client on mount
     useEffect(() => {
         xrplClient.connect();
-
         // Cleanup function that runs on unmount (right before it)
         // Shouldnt run bcs the whole App is wrapped by the XrplClientContext but its a safety measure
         return () => {
