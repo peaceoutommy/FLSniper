@@ -11,12 +11,12 @@ export const XrplClientProvider = ({ children }) => {
         xrplClient.connect();
 
         // Cleanup function that runs on unmount (right before it)
-        // Shouldnt run bcs the whole App is wapped by the XrplClientContext but its a safety measure
+        // Shouldnt run bcs the whole App is wrapped by the XrplClientContext but its a safety measure
         return () => {
             xrplClient.disconnect();
         };
     }, []); 
-    // Just learned that the use effect runs on start AND everytime the dependencies on the dependency list change
+    // Use effect runs on mount AND everytime the dependencies on the dependency list change
     // If there are no dependencies it will run only Once
 
     return (
@@ -26,7 +26,7 @@ export const XrplClientProvider = ({ children }) => {
     );
 };
 
-export const useXrpl = () => {
+export const useXrplClientContext = () => {
     const context = useContext(XrplClientContext);
     if (!context) {
         throw new Error("XrplClientContext: useXrpl must be used within a XrplClientProvider");

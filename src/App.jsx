@@ -7,6 +7,9 @@ import './App.css'
 // Pages
 import Home from './pages/Home';
 
+// Components
+import WalletModal from './components/layout/WalletModal';
+
 function App() {
   const root = document.getElementById("root");
 
@@ -58,17 +61,15 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
+      <div className='max-w-6xl mx-auto space-y-12'>
+        <WalletModal />
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </div>
     </BrowserRouter>
     // <div className="App">
-    //   <div>
-    //     <p>XRPL Client Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
-    //     <button onClick={isConnected ? disconnect : connect}>
-    //       {isConnected ? 'Disconnect' : 'Connect'}
-    //     </button>
-    //   </div>
 
     //   {wallet && (
     //     <div>
