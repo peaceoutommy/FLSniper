@@ -108,7 +108,7 @@ class WalletRepository {
                 localStorage.setItem("wallets", JSON.stringify(wallets))
 
                 // Set the selected Wallet to the 1st Wallet
-                this.selectWallet(0)
+                // this.selectWallet(0)
             }
         }
     }
