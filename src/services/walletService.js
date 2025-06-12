@@ -55,7 +55,7 @@ class WalletService {
                 console.log("Wallet is not defined")
                 return
             }
-            
+
             await WalletRepository.removeWallet(wallet)
 
             this.selectWallet(0)

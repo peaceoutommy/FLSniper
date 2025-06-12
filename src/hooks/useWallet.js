@@ -61,6 +61,7 @@ export const useWallet = () => {
         try {
             const walletDetails = await WalletService.createWallet(client, name)
             setWallet(walletDetails)
+            await getAllWallets()
         } catch (error) {
             console.log("Error generating wallet", error)
         }
@@ -74,6 +75,7 @@ export const useWallet = () => {
     const removeWallet = useCallback(async (wallet) => {
         try {
             await WalletService.removeWallet(wallet)
+            await getAllWallets()
         } catch (error) {
             console.log("Error removing wallet on useWallet", error)
         }
