@@ -8,12 +8,11 @@ import './App.css'
 import Home from './pages/Home';
 
 // Components
-import WalletModal from './components/layout/WalletModal';
+import WalletWidget from './components/layout/WalletWidget';
 
 function App() {
   const { isConnected, error: clientError, connect } = useXrplClientContext();
-  const { isLoading: walletLoading, error: walletError, wallet: wallet } = useWalletContext();
-  console.log(wallet)
+  const { isLoading: walletLoading, error: walletError, wallet } = useWalletContext();
 
   if (!isConnected) {
     return <div>Connecting to XRPL...</div>;
@@ -29,47 +28,24 @@ function App() {
     );
   }
 
-  // if (walletLoading) {
-  //   return <div>Loading wallet details...</div>;
-  // }
+  if (walletLoading) {
+    return <div>Loading wallet details...</div>;
+  }
 
-  // if (walletError) {
-  //   return <div>Error loading wallet: {walletError}</div>;
-  // }
+  if (walletError) {
+    return <div>Error loading wallet: {walletError}</div>;
+  }
 
   return (
     <BrowserRouter>
       <div className='max-w-6xl mx-auto space-y-12'>
-        <WalletModal />
+        <WalletWidget />
 
         <Routes>
           <Route path="/" element={<Home />} />
         </Routes>
       </div>
     </BrowserRouter>
-    // <div className="App">
-
-    //   {wallet && (
-    //     <div>
-    //       <h2>Wallet Details</h2>
-    //       <p><strong>Address:</strong> {wallet.address}</p>
-    //       <p><strong>Balance:</strong> {wallet.balanceInXrp} XRP</p>
-
-    //       {/* Wallet seed comes from the object created when calling the createTestnetWallet method, it only appears when creating a testnet wallet */}
-    //       {wallet.seed && (
-    //         <>
-    //           <p><strong>Seed:</strong> {wallet.seed}</p>
-    //           <p><strong>Public Key:</strong> {wallet.publicKey}</p>
-    //           <p><strong>Private Key:</strong> {wallet.privateKey}</p>
-    //         </>
-    //       )}
-    //     </div>
-    //   )}
-
-    //   <button onClick={() => createWallet(client)}>
-    //     New wallet
-    //   </button>
-    // </div>
   );
 }
 

@@ -10,9 +10,7 @@ function Home() {
 
     return (
         <div>
-           
-            <p><strong>Wallet: </strong></p>
-            
+            <h1>Home page</h1>
         </div>
     )
 }

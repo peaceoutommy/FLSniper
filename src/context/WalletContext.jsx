@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useXrplClientContext } from "./xrplClientContex";
 import { useWallet } from "../hooks/useWallet";
 
@@ -8,9 +8,11 @@ export const WalletProvider = ({ children }) => {
     const { client, isConnected } = useXrplClientContext();
     const wallet = useWallet();
 
-    // Fetch wallet details once connected
+    // Fetch all wallets (not in Wallet object but as a list of strings)
+    // Fetch selected wallet details once connected
     useEffect(() => {
         if (client && isConnected) {
+            wallet.getAllWallets()
             wallet.getWalletDetails(client)
         }
     }, [client, isConnected])

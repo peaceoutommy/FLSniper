@@ -1,10 +1,23 @@
 import { Wallet, classicAddressToXAddress } from "xrpl";
 
 class WalletRepository {
-    async getWalletDetails(client) {
 
-        // Get wallet seed from .env
-        const wallet = Wallet.fromSeed(process.env.REACT_APP_SEED)
+    async getAllWallets() {
+        return JSON.parse(localStorage.getItem("wallets") || "[]")
+    }
+
+    async getWalletDetails(client) {
+        // Get all wallets from localstorage
+        const wallets = await this.getAllWallets();
+
+        // Get selected wallet index from localstorage
+        const selectedWalletIndex = await this.getSelectedWalletIndex()
+
+        // Create the XRPL Wallet object based on the selected wallet index
+        const wallet = Wallet.fromSeed(wallets[selectedWalletIndex].seed)
+
+        // Get selectedWallet name
+        const walletName = wallets[selectedWalletIndex].name
 
         // Get wallet details
         const { result: { account_data } } = await client.request({
@@ -27,28 +40,75 @@ class WalletRepository {
         // Calculate the total reserve amount
         const accountReserve = ownerCount * reserve_inc_xrp + reserve_base_xrp;
 
-        console.log('Wallet Repository: Got wallet details!');
-
         return {
             account_data,
             accountReserve,
             xAddress: classicAddressToXAddress(wallet.address, false, false),
-            address: wallet.address
+            address: wallet.address,
+            wName: walletName
         };
     }
 
-    async createWallet() {
-        const wallet = Wallet.generate()
-        return wallet
+    async getSelectedWalletIndex() {
+        return JSON.parse(localStorage.getItem("selectedWalletIndex") || "0")
     }
 
-    async createTestnetWallet(client) {
-        console.log("Creating testwallet")
+    async selectWallet(index) {
+        localStorage.setItem("selectedWalletIndex", index);
+    }
+
+    async createWallet(name) {
+        const wallet = Wallet.generate()
+        const walletWithName = { ...wallet, name: name }
+        await this.addWallet(walletWithName)
+        return walletWithName
+    }
+
+    async createTestnetWallet(client, name) {
         const fund_result = await client.fundWallet()
         const wallet = fund_result.wallet
-        return wallet
+        const walletWithName = { ...wallet, name: name }
+        await this.addWallet(walletWithName)
+        return walletWithName
     }
 
+    async addWallet(wallet) {
+        // Get Wallet list from localstorage
+        let wallets = JSON.parse(localStorage.getItem("wallets"))
+
+        if (wallets != null) {
+            // If wallet already exists return
+            if (wallets.some(w => w.seed === wallet.seed)) {
+                return;
+            }
+            wallets.push(wallet);
+
+        } else {
+
+            wallets = [];
+            wallets.push(wallet);
+
+        }
+
+        localStorage.setItem("wallets", JSON.stringify(wallets))
+    }
+
+    async removeWallet(wallet) {
+        // Get Wallet list from localstorage
+        let wallets = JSON.parse(localStorage.getItem("wallets"))
+
+        if (wallets != null) {
+
+            // Find the wallet which address match the address from the wallet passed on props
+            const index = wallets.findIndex(w => w.classicAddress === wallet.address)
+            if (index >= 0) {
+                wallets.pop(index) // Remove it
+
+                // Set the updated wallet array on localstorage
+                localStorage.setItem("wallets", JSON.stringify(wallets))
+            }
+        }
+    }
 }
 
 export default new WalletRepository

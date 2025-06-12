@@ -3,6 +3,10 @@ import WalletRepository from "../repositories/WalletRepository";
 
 class WalletService {
 
+    async getAllWallets() {
+        return await WalletRepository.getAllWallets();
+    }
+
     async getWalletDetails(client) {
 
         if (!client) {
@@ -20,23 +24,44 @@ class WalletService {
         }
     }
 
-    async createWallet(client = null) {
+    async selectWallet(index) {
+        if (index < 0) { return }
+        await WalletRepository.selectWallet(index);
+    }
+
+    async createWallet(client = null, name = "default") {
         try {
             const testMode = process.env.REACT_APP_EXPLORER_NETWORK === "testnet";
-
             let wallet;
+
             if (testMode && client) {
                 // Create and fund a testnet wallet automatically
-                wallet = await WalletRepository.createTestnetWallet(client);
+                wallet = await WalletRepository.createTestnetWallet(client, name);
             } else {
                 // Just generate a new wallet (not funded)
-                wallet = await WalletRepository.createWallet();
+                wallet = await WalletRepository.createWallet(name);
             }
 
             return wallet;
         } catch (error) {
             console.log("Wallet Service: Error creating wallet", error)
             throw error
+        }
+    }
+
+    async removeWallet(wallet) {
+        try {
+            if (!wallet) {
+                console.log("Wallet is not defined")
+                return
+            }
+            
+            await WalletRepository.removeWallet(wallet)
+
+            this.selectWallet(0)
+            this.getWalletDetails(client)
+        } catch (error) {
+            console.log("Error removing wallet: ", error)
         }
     }
 }

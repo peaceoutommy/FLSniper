@@ -4,8 +4,23 @@ import { useCallback } from "react";
 
 export const useWallet = () => {
     const [wallet, setWallet] = useState(null)
+    const [wallets, setWallets] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
+
+    const getAllWallets = useCallback(async () => {
+        setError(null)
+        setIsLoading(true)
+
+        try {
+            const allWallets = await WalletService.getAllWallets()
+            setWallets(allWallets)
+        } catch (error) {
+            console.log("useWallet: Error getting all wallets: ", error)
+        } finally {
+            setIsLoading(false)
+        }
+    })
 
     const getWalletDetails = useCallback(async (client) => {
 
@@ -28,9 +43,23 @@ export const useWallet = () => {
         }
     }, []);
 
-    const createWallet = useCallback(async (client = null) => {
+    const selectWallet = useCallback(async (client, index) => {
         try {
-            const walletDetails = await WalletService.createWallet(client)
+            if (!client) {
+                console.log("useWallet selectWallet: no client provided")
+                return
+            }
+            await WalletService.selectWallet(index)
+            getWalletDetails(client)
+
+        } catch (error) {
+            console.log("useWallet error selecting wallet: ", error)
+        }
+    }, [wallet])
+
+    const createWallet = useCallback(async (client = null, name = "default") => {
+        try {
+            const walletDetails = await WalletService.createWallet(client, name)
             setWallet(walletDetails)
         } catch (error) {
             console.log("Error generating wallet", error)
@@ -42,12 +71,24 @@ export const useWallet = () => {
         setError(null)
     }, [])
 
+    const removeWallet = useCallback(async (wallet) => {
+        try {
+            await WalletService.removeWallet(wallet)
+        } catch (error) {
+            console.log("Error removing wallet on useWallet", error)
+        }
+    }, [])
+
     return {
         wallet,
+        wallets,
         isLoading,
         error,
         getWalletDetails,
+        getAllWallets,
         createWallet,
-        clearWallet
+        clearWallet,
+        selectWallet,
+        removeWallet
     };
 }
