@@ -61,7 +61,7 @@ class WalletRepository {
         const wallet = Wallet.generate()
         const walletWithName = { ...wallet, name: name }
         await this.addWallet(walletWithName)
-        return walletWithName
+        // return walletWithName
     }
 
     async createTestnetWallet(client, name) {
@@ -69,7 +69,7 @@ class WalletRepository {
         const wallet = fund_result.wallet
         const walletWithName = { ...wallet, name: name }
         await this.addWallet(walletWithName)
-        return walletWithName
+        // return walletWithName
     }
 
     async addWallet(wallet) {
@@ -106,9 +106,6 @@ class WalletRepository {
 
                 // Set the updated wallet array on localstorage
                 localStorage.setItem("wallets", JSON.stringify(wallets))
-
-                // Set the selected Wallet to the 1st Wallet
-                // this.selectWallet(0)
             }
         }
     }

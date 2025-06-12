@@ -36,13 +36,17 @@ class WalletService {
 
             if (testMode && client) {
                 // Create and fund a testnet wallet automatically
-                wallet = await WalletRepository.createTestnetWallet(client, name);
+                // wallet = await WalletRepository.createTestnetWallet(client, name);
+                await WalletRepository.createTestnetWallet(client, name);
+
             } else {
                 // Just generate a new wallet (not funded)
-                wallet = await WalletRepository.createWallet(name);
+                // wallet = await WalletRepository.createWallet(name);
+                await WalletRepository.createWallet(name);
+
             }
 
-            return wallet;
+            // return wallet;
         } catch (error) {
             console.log("Wallet Service: Error creating wallet", error)
             throw error

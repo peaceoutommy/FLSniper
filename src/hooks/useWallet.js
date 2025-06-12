@@ -14,7 +14,9 @@ export const useWallet = () => {
 
         try {
             const allWallets = await WalletService.getAllWallets()
+            console.log("useWallet getAllWallets: ", allWallets)
             setWallets(allWallets)
+            return allWallets
         } catch (error) {
             console.log("useWallet: Error getting all wallets: ", error)
         } finally {
@@ -59,9 +61,12 @@ export const useWallet = () => {
 
     const createWallet = useCallback(async (client = null, name = "default") => {
         try {
-            const walletDetails = await WalletService.createWallet(client, name)
-            setWallet(walletDetails)
-            await getAllWallets()
+            await WalletService.createWallet(client, name)
+            const updatedWallets = await getAllWallets()
+            const newWalletIndex = updatedWallets.length - 1
+            await selectWallet(client, newWalletIndex)
+            await getWalletDetails(client)
+
         } catch (error) {
             console.log("Error generating wallet", error)
         }
@@ -75,8 +80,7 @@ export const useWallet = () => {
     const removeWallet = useCallback(async (wallet, client) => {
         try {
             await WalletService.removeWallet(wallet)
-            await selectWallet(0)
-            await getAllWallets()
+            await selectWallet(client, 0)
             await getWalletDetails(client)
         } catch (error) {
             console.log("Error removing wallet on useWallet", error)
