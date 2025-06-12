@@ -11,6 +11,8 @@ function WalletWidget() {
 
     const [newWalletName, setNewWalletName] = useState(null)
 
+    console.log(walletContext.wallet)
+
     return (
         <>
             {isOpen ?
@@ -29,7 +31,7 @@ function WalletWidget() {
                             <p><strong>Address:</strong> {walletContext.wallet.address}</p>
                             <p><strong>Balance:</strong> {walletContext.wallet.balanceInXrp} XRP</p>
 
-                            <button onClick={() => walletContext.removeWallet(walletContext.wallet)}>Remove selected Wallet</button>
+                            <button onClick={() => walletContext.removeWallet(walletContext.wallet, client)}>Remove selected Wallet</button>
 
                             {/* Wallet seed comes from the object created when calling the createTestnetWallet method, it only appears when creating a testnet wallet */}
                             {walletContext.wallet.seed != null && (

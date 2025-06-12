@@ -72,10 +72,11 @@ export const useWallet = () => {
         setError(null)
     }, [])
 
-    const removeWallet = useCallback(async (wallet) => {
+    const removeWallet = useCallback(async (wallet, client) => {
         try {
             await WalletService.removeWallet(wallet)
             await getAllWallets()
+            await getWalletDetails(client)
         } catch (error) {
             console.log("Error removing wallet on useWallet", error)
         }

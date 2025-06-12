@@ -102,10 +102,13 @@ class WalletRepository {
             // Find the wallet which address match the address from the wallet passed on props
             const index = wallets.findIndex(w => w.classicAddress === wallet.address)
             if (index >= 0) {
-                wallets.pop(index) // Remove it
+                wallets.splice(index, 1) // Remove it
 
                 // Set the updated wallet array on localstorage
                 localStorage.setItem("wallets", JSON.stringify(wallets))
+
+                // Set the selected Wallet to the 1st Wallet
+                this.selectWallet(0)
             }
         }
     }
