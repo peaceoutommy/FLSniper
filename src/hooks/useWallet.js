@@ -80,6 +80,7 @@ export const useWallet = () => {
     const removeWallet = useCallback(async (wallet, client) => {
         try {
             await WalletService.removeWallet(wallet)
+            await getAllWallets()
             await selectWallet(client, 0)
             await getWalletDetails(client)
         } catch (error) {

@@ -6,34 +6,50 @@
     }
 
     .dark {
-        --bg-primary: #0D1117;
-        /* Near-black primary background */
-        --bg-secondary: #161B22;
-        /* Lighter background for cards/surfaces */
-        --text-primary: #E6EDF3;
-        /* Primary text color - light gray */
-        --text-secondary: #8B949E;
-        /* Secondary text color - dimmer gray */
-        --border-color: #30363D;
-        /* Border and divider color */
-        --accent-neon: #16a34a;
-        /* Your primary neon accent color (e.g., green) */
-        --accent-neon-hover: #22c55e;
-        /* A brighter accent for hover states */
+        --bg-primary: #050609;
+        /* Very deep dark primary background */
+        --bg-secondary: #0A0D12;
+        /* Slightly lighter surface background */
+        --bg-tertiary: #0F1318;
+        /* Card/elevated surface background */
+        --text-primary: #E2E8F0;
+        /* Primary text - soft white */
+        --text-secondary: #7C8B9A;
+        /* Secondary text - very muted blue-gray */
+        --text-tertiary: #5A6B7A;
+        /* Tertiary text - dimmer blue-gray */
+        --border-color: #1A1F26;
+        /* Very subtle border color */
+        --border-hover: #252C35;
+        /* Slightly visible border on hover */
+        --accent-blue: #4F6B8F;
+        /* Very muted blue accent */
+        --accent-blue-hover: #5D7BA3;
+        /* Slightly brighter muted blue for hover */
+        --accent-blue-muted: #3A4F68;
+        /* Even more muted blue for backgrounds */
 
-        /* A pre-composed neon glow shadow for reuse */
-        --shadow-neon-glow: 0 0 8px 0 var(--accent-neon), 0 0 12px 0 var(--accent-neon-hover);
+        /* Very subtle shadows */
+        --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+        --shadow-medium: 0 2px 4px 0 rgba(0, 0, 0, 0.6);
+        --shadow-accent: 0 0 0 1px rgba(79, 107, 143, 0.15);
     }
 }
 
 @theme {
     --color-primary: var(--bg-primary);
     --color-secondary: var(--bg-secondary);
+    --color-tertiary: var(--bg-tertiary);
     --color-text-primary: var(--text-primary);
     --color-text-secondary: var(--text-secondary);
+    --color-text-tertiary: var(--text-tertiary);
     --color-border: var(--border-color);
-    --color-accent: var(--accent-neon);
-    --color-accent-hover: var(--accent-neon-hover);
+    --color-border-hover: var(--border-hover);
+    --color-accent: var(--accent-blue);
+    --color-accent-hover: var(--accent-blue-hover);
+    --color-accent-muted: var(--accent-blue-muted);
     --font-sans: "Inter", sans-serif;
-    --shadow-neon-glow: var(--shadow-neon-glow);
+    --shadow-subtle: var(--shadow-subtle);
+    --shadow-medium: var(--shadow-medium);
+    --shadow-accent: var(--shadow-accent);
 }
