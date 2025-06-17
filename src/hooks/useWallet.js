@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import WalletService from "../services/walletService";
 import { useCallback } from "react";
+import walletService from "../services/walletService";
 
 export const useWallet = () => {
     const [wallet, setWallet] = useState(null)
@@ -88,6 +89,10 @@ export const useWallet = () => {
         }
     }, [])
 
+    const sendPayment = useCallback(async (client, amount, address, wallet) => {
+        await walletService.sendPayment(client, amount, address, wallet.wallet)
+    })
+
     return {
         wallet,
         wallets,
@@ -98,6 +103,7 @@ export const useWallet = () => {
         createWallet,
         clearWallet,
         selectWallet,
-        removeWallet
+        removeWallet,
+        sendPayment
     };
 }

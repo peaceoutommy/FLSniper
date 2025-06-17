@@ -1,4 +1,4 @@
-import { Wallet, classicAddressToXAddress } from "xrpl";
+import { Wallet, classicAddressToXAddress, isValidClassicAddress, xrpToDrops } from "xrpl";
 
 class WalletRepository {
 
@@ -45,7 +45,8 @@ class WalletRepository {
             accountReserve,
             xAddress: classicAddressToXAddress(wallet.address, false, false),
             address: wallet.address,
-            wName: walletName
+            wName: walletName,
+            wallet: wallet
         };
     }
 
@@ -108,6 +109,32 @@ class WalletRepository {
                 localStorage.setItem("wallets", JSON.stringify(wallets))
             }
         }
+    }
+
+    async validateAddress(address) {
+        address = address.trim();
+
+        // Check if the address is valid
+        if (isValidClassicAddress(address)) {
+            return address
+        } else {
+            return "Invalid Wallet address"
+        }
+    }
+
+    async sendPayment(client, amount, address, wallet) {
+
+        const tx = {
+            TransactionType: 'Payment',
+            Amount: xrpToDrops(parseFloat(amount)),
+            Destination: address,
+            Account: wallet.address
+        };
+
+        console.log(wallet)
+
+        const result = await client.submit(tx, { wallet })
+        console.log(result)
     }
 }
 

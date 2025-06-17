@@ -10,8 +10,19 @@ function WalletWidget() {
     const { isOpen, toggleWidget } = useWalletWidgetContext();
 
     const [newWalletName, setNewWalletName] = useState(null)
+    const [transactionAmount, setTransactionAmount] = useState(null)
+    const [targetWallet, setTargetWallet] = useState(null)
 
-    console.log(walletContext.wallet)
+    const handleCreateWallet = () => {
+        walletContext.createWallet(client, newWalletName)
+        setNewWalletName(null)
+    }
+
+    const handleSendPayment = () => {
+        walletContext.sendPayment(client, transactionAmount, targetWallet, walletContext.wallet)
+        setTransactionAmount(null)
+        setTargetWallet(null)
+    }
 
     return (
         <>
@@ -26,7 +37,7 @@ function WalletWidget() {
                         </div>
                         <button
                             onClick={toggleWidget}
-                            className="p-1.5 hover:bg-secondary rounded-lg transition-colors duration-200"
+                            className="p-1.5 hover:bg-secondary rounded-lg transition-colors duration-200 cursor-pointer"
                         >
                             <X className="w-4 h-4 text-text-tertiary hover:text-text-secondary" />
                         </button>
@@ -121,12 +132,35 @@ function WalletWidget() {
                                 </button>
 
                                 <button
-                                    onClick={() => walletContext.createWallet(client, newWalletName)}
+                                    onClick={() => handleCreateWallet()}
                                     className="w-full bg-secondary hover:bg-border text-text-secondary hover:text-text-primary border border-border hover:border-border-hover font-medium py-2.5 px-4 rounded-lg transition-all duration-200 text-sm"
                                 >
                                     Create Testnet Wallet
                                 </button>
                             </div>
+                        </div>
+
+                        <div>
+                            <input
+                                type="text"
+                                value={targetWallet || ""}
+                                onChange={(e) => setTargetWallet(e.target.value)}
+                                placeholder="Target wallet address"
+                                className="w-full bg-secondary border border-border rounded-lg px-3 py-2.5 text-text-primary text-sm placeholder-text-tertiary focus:outline-none focus:border-border-hover focus:bg-primary transition-all duration-200"
+                            />
+                            <input
+                                type="text"
+                                value={transactionAmount || ""}
+                                onChange={(e) => setTransactionAmount(e.target.value)}
+                                placeholder="Amount of XRP to send"
+                                className="w-full bg-secondary border border-border rounded-lg px-3 py-2.5 text-text-primary text-sm placeholder-text-tertiary focus:outline-none focus:border-border-hover focus:bg-primary transition-all duration-200"
+                            />
+                            <button
+                                onClick={() => handleSendPayment()}
+                                className="w-full bg-secondary hover:bg-border text-text-secondary hover:text-text-primary border border-border hover:border-border-hover font-medium py-2.5 px-4 rounded-lg transition-all duration-200 text-sm"
+                            >
+                                Send Transaction
+                            </button>
                         </div>
 
                         {walletContext.wallets.length > 0 && (
@@ -159,7 +193,7 @@ function WalletWidget() {
                 :
                 <button
                     onClick={toggleWidget}
-                    className="fixed top-4 right-4 z-50 p-3 bg-tertiary hover:bg-secondary border border-border hover:border-border-hover rounded-xl transition-all duration-200 shadow-subtle"
+                    className="fixed top-4 right-4 z-50 p-3 bg-tertiary hover:bg-secondary border border-border hover:border-border-hover rounded-xl transition-all duration-200 shadow-subtle cursor-pointer"
                 >
                     <Wallet className="w-5 h-5 text-text-tertiary hover:text-text-secondary transition-colors" />
                 </button>

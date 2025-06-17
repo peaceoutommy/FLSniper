@@ -28,13 +28,6 @@ function App() {
     );
   }
 
-  if (walletLoading) {
-    return <div>Loading wallet details...</div>;
-  }
-
-  if (walletError) {
-    return <div>Error loading wallet: {walletError}</div>;
-  }
 
   return (
     <BrowserRouter>

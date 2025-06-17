@@ -32,7 +32,6 @@ class WalletService {
     async createWallet(client = null, name = "default") {
         try {
             const testMode = process.env.REACT_APP_EXPLORER_NETWORK === "testnet";
-            let wallet;
 
             if (testMode && client) {
                 // Create and fund a testnet wallet automatically
@@ -62,6 +61,17 @@ class WalletService {
             await WalletRepository.removeWallet(wallet)
         } catch (error) {
             console.log("Error removing wallet: ", error)
+        }
+    }
+
+    async sendPayment(client, amount, address, wallet) {
+        try {
+            if (!client || !amount || !address || !wallet) {
+                console.log("client or amount or address or wallet are not defined")
+            }
+            await WalletRepository.sendPayment(client, amount, address, wallet)
+        } catch (error) {
+            console.log("walletService sendPayment error", error)
         }
     }
 }
